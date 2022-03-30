@@ -1,15 +1,16 @@
 import { Probot } from "probot";
 
 export = (app: Probot) => {
-  app.on("issues.opened", async (context) => {
-    const issueComment = context.issue({
-      body: "Thanks for opening this issue!",
-    });
-    await context.octokit.issues.createComment(issueComment);
-  });
-  // For more information on building apps:
-  // https://probot.github.io/docs/
+  app.log.info("Bot loading");  
 
-  // To get your app running against GitHub, see:
-  // https://probot.github.io/docs/development/
+  app.on("pull_request_review", async (context) => {
+    context.log.info("PR Review");
+    let data = context.payload;
+    // Check to see that it's submitted, approved, and that the id is leon
+    if (data.action == "submitted" && data.review.state == "approved" && data.sender.id == 67800009) {
+      context.log("Approved submission");
+      // Do some label stuff
+    }
+    // context.log.info(context);
+  });
 };
